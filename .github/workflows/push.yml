@@ -14,3 +14,13 @@ jobs:
       run: docker build . --file Dockerfile --tag alanx30/ecommercemodulo_apinode:latest
     - name: push the Docker image
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }} && docker push alanx30/ecommercemodulo_apinode:latest
+
+# Set up the Kubernetes CLI with your DigitalOcean Kubernetes cluster.
+    - name: Set up kubectl
+      uses: matootie/dokube@v1.4.0
+      with:
+        personalAccessToken: ${{ secrets.DIGITALOCEAN_TOKEN }}
+        clusterName: do-sfo3-omnixapi
+    # Run any kubectl commands you want!
+    - name: Get nodes
+      run: kubectl get nodes

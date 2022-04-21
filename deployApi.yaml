@@ -34,4 +34,4 @@ spec:
   - port: 8080
     name: api
   selector:
-    app: api
+    app: apimodulo
