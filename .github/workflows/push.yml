@@ -20,7 +20,7 @@ jobs:
       uses: matootie/dokube@v1.4.0
       with:
         personalAccessToken: ${{ secrets.DIGITALOCEAN_TOKEN }}
-        clusterName: do-sfo3-omnixapi
+        clusterName: a243c66a-939c-439d-acd0-89b3520df80f
     # Run any kubectl commands you want!
     - name: Get nodes
       run: kubectl get nodes
