@@ -1,7 +1,5 @@
 node {
 
-    agent { label 'jenkins_agent' }
-
     def app
 
     stage('Clone repository') {
