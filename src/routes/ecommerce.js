@@ -7,6 +7,11 @@ router.get('/api/1.0/hello', (req,res)=>{
         message: "hello"
     })
 })
+router.get('/api/1.0/helloworld', (req,res)=>{
+    res.json({
+        message: "helloworld"
+    })
+})
 
 router.post('/api/1.0/initialreserve', ecommerce.initialReserve)
 
