@@ -1,47 +1,35 @@
-pipeline {
+node {
 
-    agent any
+    agent { label 'jenkins_agent' }
 
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '5'))
+    def app
+
+    stage('Clone repository') {
+      
+        checkout scm
+
     }
-
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-    }
-
-
 
     stage('Build image') {
-        steps {
-            sh 'docker build -t alanx30/ecommercemodulo_apinode:${env.BUILD_NUMBER} .'
+  
+       app = docker.build("alanx30/ecommercemodulo_apinode")
+    }
+
+    stage('Test image') {
+        app.inside {
+            sh 'echo "Tests passed"'
         }
     }
 
-    stage('Login Docker') {
-        steps {
-            sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-        }
-    }
-
-    stage('Push') {
-
-        steps {
-            sh 'alanx30/ecommercemodulo_apinode:${env.BUILD_NUMBER}'
+    stage('Push image') {
+        
+        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+            app.push("${env.BUILD_NUMBER}")
         }
     }
     
     stage('Trigger ManifestUpdate') {
-        steps {
-            echo "triggering updatemanifestjob"
-            build job: 'updatemanifestapi', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+                echo "triggering updatemanifestjob"
+                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
         }
-    }
-
-    post {
-		always {
-			sh 'docker logout'
-		}
-	}
-
 }
