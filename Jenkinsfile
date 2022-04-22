@@ -8,12 +8,6 @@ pipeline {
 
     stages {
 
-        stage('Clone repository') {
-
-            checkout scm
-            
-        }
-
         stage('Build image') {
             steps {
                 sh 'docker build -t alanx30/ecommercemodulo_apinode:${env.BUILD_NUMBER} .'
@@ -34,8 +28,10 @@ pipeline {
 		}
         
         stage('Trigger ManifestUpdate') {
-            echo "triggering updatemanifestjob"
-            build job: 'updatemanifestapi', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+            steps {
+                echo "triggering updatemanifestjob"
+                build job: 'updatemanifestapi', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+            }
         }
 
     }
