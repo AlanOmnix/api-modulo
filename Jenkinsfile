@@ -1,34 +1,47 @@
 node {
-    def app
 
-    stage('Clone repository') {
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+    }
 
-        checkout scm
+    stages {
+
+        stage('Clone repository') {
+
+            checkout scm
+            
+        }
+
+        stage('Build image') {
+            steps {
+                sh 'docker build -t alanx30/ecommercemodulo_apinode:${env.BUILD_NUMBER} .'
+            }
+        }
+
+        stage('Login Docker') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+
+        stage('Push') {
+
+			steps {
+				sh 'alanx30/ecommercemodulo_apinode:${env.BUILD_NUMBER}'
+			}
+		}
         
-    }
-
-    stage('Build image') {
-  
-       app = docker.build("alanx30/ecommercemodulo_apinode")
-    }
-
-    stage('Test image') {
-  
-
-        app.inside {
-            sh 'echo "Tests passed"'
+        stage('Trigger ManifestUpdate') {
+            echo "triggering updatemanifestjob"
+            build job: 'updatemanifestapi', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
         }
+
     }
 
-    stage('Push image') {
-        
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-            app.push("${env.BUILD_NUMBER}")
-        }
-    }
-    
-    stage('Trigger ManifestUpdate') {
-                echo "triggering updatemanifestjob"
-                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
-        }
+    post {
+		always {
+			sh 'docker logout'
+		}
+	}
+
 }
