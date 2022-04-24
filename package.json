@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src -d dist",
     "dev": "nodemon --legacy-watch src --exec babel-node",
-    "test": "mocha",
+    "test": "mocha --recursive --reporter mocha-junit-reporter --timeout 60000 --exit",
     "coverage-lcov": "./node_modules/.bin/nyc -r cobertura -r text-summary -r lcov npm test",
     "coverage": "./node_modules/.bin/nyc -r cobertura -r text-summary -r html npm test",
     "sonar": "sonar-scanner"
