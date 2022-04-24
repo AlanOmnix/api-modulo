@@ -8,15 +8,13 @@ node {
 
     }
 
-    stages('Test node.js') {
+
         
-        stage('Sonarqube analsis'){
-            nodejs(nodeJSInstallationName: 'nodejs'){
-                sh "npm install"
-            }
+    stage('Sonarqube analsis'){
+        nodejs(nodeJSInstallationName: 'nodejs'){
+            sh "npm install"
         }
-        
-    }
+    }     
 
     
 }
