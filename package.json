@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src -d dist",
-    "dev": "nodemon --legacy-watch src --exec babel-node"
+    "dev": "nodemon --legacy-watch src --exec babel-node",
+    "test": "mocha",
+    "coverage-lcov": "./node_modules/.bin/nyc -r cobertura -r text-summary -r lcov npm test",
+    "sonar": "sonar-scanner"
+    
   },
   "keywords": [],
   "author": "",
