@@ -14,7 +14,7 @@ node {
 
         nodejs(nodeJSInstallationName: 'nodejs'){
             sh "npm install"
-            withSonarQubeEnv('sonar'){
+            withSonarQubeEnv('sonarqube'){
                 sh "npm install sonar-scanner"
                 sh "npm run sonar"
             }
