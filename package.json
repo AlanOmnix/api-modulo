@@ -8,6 +8,7 @@
     "dev": "nodemon --legacy-watch src --exec babel-node",
     "test": "mocha",
     "coverage-lcov": "./node_modules/.bin/nyc -r cobertura -r text-summary -r lcov npm test",
+    "coverage": "./node_modules/.bin/nyc -r cobertura -r text-summary -r html npm test",
     "sonar": "sonar-scanner"
     
   },
